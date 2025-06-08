@@ -1,0 +1,548 @@
+<!-- Created by DiamondRoPlayz :) -->
+
+<html>
+  <head>
+    <title>GaG Calc</title>
+    <style>
+      body{
+        background: #111;
+        color: #fff;
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        user-select: none;
+      }
+      input,select{
+        background: #222;
+        padding: 6px;
+        border-radius: 6px;
+        margin: 6px;
+        border: 0;
+        color: #fff;
+        max-width: 150px;
+        outline: none;
+      }
+      input[type="number"]:enabled{
+        box-shadow: 0 0 0 2px #999;
+      }
+      input[type="number"]:enabled:focus{
+        box-shadow: 0 0 0 2px #FFF;
+      }
+      label{
+        color: #999;
+      }
+      label:has(input){
+        background: #222;
+        padding: 6px;
+        border-radius: 6px;
+        margin: 3px;
+        display: inline-block;
+        color: #fff;
+      }
+      div{
+        padding:12px;
+        background: #151515;
+        border-radius: 6px;
+        margin: 6px;
+      }
+      input:disabled{
+        opacity:.5;
+      }
+      label:has(input){
+        color:#999;
+        opacity:.5;
+      }
+      label:has(input:checked){
+        color: #FFF;
+        opacity: 1;
+      }
+      label:has(input[type="radio"]:checked){
+        box-shadow: inset 0 0 0 2px #0069ff;
+      }
+      label:has(input[type="checkbox"]:checked){
+        box-shadow: inset 0 0 0 2px #69ff69;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Grow a Garden Calculator</h1>
+    <label for="crop">Crop</label>
+    <select name="crop" id="crop"></select>
+    <label for="minValue">Min Value</label>
+    <input name="minValue"id="minValue"value="18"disabled>
+    <label for="minWeight">Min Weight</label>
+    <input name="minWeight"id="minWeight"value="0.24"disabled>
+
+    <br>
+    <label for="Rarity">Rarity</label>
+    <label><input type="radio" name="craft" value="None"checked>None</label>
+    <label><input type="radio" name="craft" value="Gold">Gold ( x20 )</label>
+    <label><input type="radio" name="craft" value="Rainbow">Rainbow ( x50 )</label>
+
+    <br>
+    <label for="Temp">Temp</label>
+    <label><input type="radio" name="temp" value="None"checked>None</label>
+    <label><input type="radio" name="temp" value="Wet">Wet ( +1 )</label>
+    <label><input type="radio" name="temp" value="Chilled">Chilled ( +1 )</label>
+    <label><input type="radio" name="temp" value="Frozen">Frozen ( +9 )</label>
+    <br>
+    <br>
+    <label for="mutations">Mutations</label>
+    <div id="mutations">
+
+    </div>
+    <br>
+    <label for="kg">KG</label>
+    <input name="kg" id="kg" value="0.24" type="number"step="0.01" oninput="update()">
+    <label for="count">Quantity</label>
+    <input name="count" id="count" value="1" type="number"step="1" min="1" oninput="update()">
+    <br><br>
+    <label>Multiplier</label>
+    <span id="Multiplier">-</span>
+    <br>
+    <label>Value</label>
+    <span id="Value">-</span>
+  </body>
+  <script>
+    const fruits={
+      "Carrot": {
+        "minWeight": 0.24,
+        "k": 275,
+        "minValue": 18
+      },
+      "Chocolate Carrot": {
+        "minWeight": 0.26,
+        "k": 145096,
+        "minValue": 9928
+      },
+      "Strawberry": {
+        "minWeight": 0.29,
+        "k": 175,
+        "minValue": 14
+      },
+      "Blueberry": {
+        "minWeight": 0.17,
+        "k": 500,
+        "minValue": 18
+      },
+      "Orange Tulip": {
+        "minWeight": 0.05,
+        "k": 300000,
+        "minValue": 767
+      },
+      "Nightshade": {
+        "minWeight": 0.48,
+        "k": 13850,
+        "minValue": 3159
+      },
+      "Red Lollipop": {
+        "minWeight": 3.8,
+        "k": 3125,
+        "minValue": 45125
+      },
+      "Pear": {
+        "minWeight": 2.85,
+        "k": 55.5,
+        "minValue": 450
+      },
+      "Candy Sunflower": {
+        "minWeight": 1.43,
+        "k": 35413,
+        "minValue": 72200
+      },
+      "Tomato": {
+        "minWeight": 0.44,
+        "k": 120,
+        "minValue": 27
+      },
+      "Corn": {
+        "minWeight": 1.9,
+        "k": 10,
+        "minValue": 36
+      },
+      "Daffodil": {
+        "minWeight": 0.16,
+        "k": 25000,
+        "minValue": 903
+      },
+      "Raspberry": {
+        "minWeight": 0.71,
+        "k": 177.5,
+        "minValue": 90
+      },
+      "Glowshroom": {
+        "minWeight": 0.7,
+        "k": 532.5,
+        "minValue": 300
+      },
+      "Watermelon": {
+        "minWeight": 7.3,
+        "k": 61.25,
+        "minValue": 2708
+      },
+      "Pumpkin": {
+        "minWeight": 6.9,
+        "k": 64,
+        "minValue": 3069
+      },
+      "Apple": {
+        "minWeight": 2.85,
+        "k": 30.53,
+        "minValue": 248
+      },
+      "Bamboo": {
+        "minWeight": 3.8,
+        "k": 250,
+        "minValue": 3610
+      },
+      "Cranberry": {
+        "minWeight": 0.95,
+        "k": 2000,
+        "minValue": 1805
+      },
+      "Durian": {
+        "minWeight": 7.6,
+        "k": 78.19,
+        "minValue": 4513
+      },
+      "Easter Egg": {
+        "minWeight": 2.85,
+        "k": 277.5,
+        "minValue": 2256
+      },
+      "Moonflower": {
+        "minWeight": 1.9,
+        "k": 2381,
+        "minValue": 8574
+      },
+      "Starfruit": {
+        "minWeight": 2.85,
+        "k": 1666.6,
+        "minValue": 13538
+      },
+      "Papaya": {
+        "minWeight": 2.86,
+        "k": 111.11,
+        "minValue": 1000
+      },
+      "Coconut": {
+        "minWeight": 13.31,
+        "k": 2.04,
+        "minValue": 361
+      },
+      "Cactus": {
+        "minWeight": 6.65,
+        "k": 69.4,
+        "minValue": 3068
+      },
+      "Dragon Fruit": {
+        "minWeight": 11.38,
+        "k": 32.99,
+        "minValue": 4287
+      },
+      "Mango": {
+        "minWeight": 14.28,
+        "k": 28.89,
+        "minValue": 5873
+      },
+      "Peach": {
+        "minWeight": 1.9,
+        "k": 75,
+        "minValue": 271
+      },
+      "Pineapple": {
+        "minWeight": 2.85,
+        "k": 222.5,
+        "minValue": 1805
+      },
+      "Eggplant": {
+        "minWeight": 4.75,
+        "k": 300,
+        "minValue": 6769
+      },
+      "Moonglow": {
+        "minWeight": 6.65,
+        "k": 408.45,
+        "minValue": 18050
+      },
+      "Passionfruit": {
+        "minWeight": 2.87,
+        "k": 395,
+        "minValue": 3204
+      },
+      "Lemon": {
+        "minWeight": "",
+        "k": "",
+        "minValue": 500
+      },
+      "Banana": {
+        "minWeight": 1.43,
+        "k": 777.77,
+        "minValue": 1579
+      },
+      "Blood Banana": {
+        "minWeight": 1.42,
+        "k": 2670,
+        "minValue": 5415
+      },
+      "Moon Melon": {
+        "minWeight": 7.6,
+        "k": 281.2,
+        "minValue": 16245
+      },
+      "Grape": {
+        "minWeight": 2.85,
+        "k": 872,
+        "minValue": 7085
+      },
+      "Mushroom": {
+        "minWeight": 25.9,
+        "k": 241.6,
+        "minValue": 136278
+      },
+      "Pepper": {
+        "minWeight": 4.75,
+        "k": 320,
+        "minValue": 7220
+      },
+      "Cacao": {
+        "minWeight": 7.6,
+        "k": 171.875,
+        "minValue": 10830
+      },
+      "Moon Blossom": {
+        "minWeight": 2.85,
+        "k": 6170,
+        "minValue": 45125
+      },
+      "Cherry Blossom": {
+        "minWeight": "",
+        "k": "",
+        "minValue": 550
+      },
+      "Candy Blossom": {
+        "minWeight": 2.85,
+        "k": 11111.1111,
+        "minValue": 90250
+      },
+      "Lotus": {
+        "minWeight": 18.99,
+        "k": 42.5,
+        "minValue": 15343
+      },
+      "Venus Fly Trap": {
+        "minWeight": "",
+        "k": "",
+        "minValue": 17000
+      },
+      "Cursed Fruit": {
+        "minWeight": "",
+        "k": "",
+        "minValue": 15000
+      },
+      "Soul Fruit": {
+        "minWeight": 23.75,
+        "k": 12.4,
+        "minValue": 3000
+      },
+      "Moon Mango": {
+        "minWeight": 14.25,
+        "k": 222.22,
+        "minValue": 45125
+      },
+      "Beanstalk": {
+        "minWeight": 9.5,
+        "k": 200,
+        "minValue": 25270
+      },
+      "Celestiberry": {
+        "minWeight": 1.9,
+        "k": 2000,
+        "minValue": 9025
+      },
+      "Rose": {
+        "minWeight": 0.95,
+        "k": 5000,
+        "minValue": 4513
+      },
+      "Foxglove": {
+        "minWeight": 1.9,
+        "k": 5000,
+        "minValue": 18050
+      },
+      "Lilac": {
+        "minWeight": 2.85,
+        "k": 3899,
+        "minValue": 31588
+      },
+      "Pink Lily": {
+        "minWeight": 5.7,
+        "k": 1806.5,
+        "minValue": 58663
+      },
+      "Purple Dahlia": {
+        "minWeight": 11.4,
+        "k": 522,
+        "minValue": 67688
+      },
+      "Nectarine": {
+        "minWeight": 2.81,
+        "k": 4440,
+        "minValue": 36100
+      },
+      "Hive Fruit": {
+        "minWeight": 7.6,
+        "k": 781.5,
+        "minValue": 45125
+      },
+      "Sunflower": {
+        "minWeight": 14.23,
+        "k": 666.6,
+        "minValue": 135375
+      },
+      "Mint": {
+        "minWeight": 0.95,
+        "k": 5230,
+        "minValue": 6434
+      }
+    }
+    const crafts={
+      None:1,
+      Gold:20,
+      Rainbow:50
+    }
+    const temps={
+      None:0,
+      Wet:1,
+      Chilled:1,
+      Frozen:9
+    }
+    const mutations={
+      "Chocolate": 1,
+      "Moonlit": 1,
+      "Pollinated": 2,
+      "Bloodlit": 3,
+      "Plasma": 4,
+      "Honey Glazed": 4,
+      "Zombified": 24,
+      "Shocked": 99,
+      "Celestial": 119,
+      "Disco": 124,
+      "Voidtouched": 134
+    };
+
+    const getParam=name=>new URL(window.location).searchParams.get(name);
+    const setParam=(name,value)=>{
+      const url=new URL(window.location);
+      url.searchParams.set(name,value);
+      history.pushState(null,'',url);
+    }
+    const delParam=(name)=>{
+      const url=new URL(window.location);
+      url.searchParams.delete(name);
+      history.pushState(null,'',url);
+    }
+
+    document.getElementById('mutations').append(
+      ...Object.entries(mutations)
+      .map(([i,v])=>{
+        //`<label><input type="radio" name="temp" value="Wet">Wet</label>`
+        const label=Object.assign(document.createElement('label'),{text:v});
+        const input=Object.assign(document.createElement('input'),{type:'checkbox',id:'mutation',value:v,name:i});
+        label.appendChild(input,"hello")
+        label.append(`${i} ( +${v} )`)
+        return label
+      })
+    )
+
+    var cropName=fruits[getParam('crop')]&&getParam('crop')||Object.keys(fruits).sort()[0];
+    var selectedCrop=fruits[cropName];
+    document.getElementById('kg').value=getParam('kg')||selectedCrop.minWeight;
+    document.getElementById('count').value=getParam('count')||1;
+
+    document.getElementById('kg').ondblclick=e=>update(e.target.value=selectedCrop.minWeight);
+    document.getElementById('kg').onwheel=(e)=>{
+      e.target.value=Math.max((e.target.valueAsNumber+(e.deltaY>0&&-.01||.01)).toFixed(2),e.target.min)
+      e.preventDefault();e.stopPropagation();update();
+    };
+    document.getElementById('count').ondblclick=e=>update(e.target.value=1);
+    document.getElementById('count').onwheel=(e)=>{
+      e.target.value=Math.max((e.target.valueAsNumber+(e.deltaY>0&&-1||1)).toFixed(0),1)
+      e.preventDefault();e.stopPropagation();update();
+    };
+
+
+    var multiplier=1;var craftMulti=1;var tempMulti=0;var kg=selectedCrop.minWeight;var count=1;
+    const update=()=>{
+      kg=document.getElementById('kg').value;setParam('kg',kg);
+      count=document.getElementById('count').value;setParam('count',count);
+      var multi=craftMulti*(tempMulti+multiplier);
+      document.getElementById('Multiplier').textContent=multi.toLocaleString()+' x'
+      //if(!selectedCrop)return;
+      const value=kg>selectedCrop.minWeight&&Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2)))||selectedCrop.minValue;
+      //console.log(value)
+      document.getElementById('Value').textContent=(value*multi*document.getElementById('count').valueAsNumber).toLocaleString()+' $'
+    }
+    const cropSelect=document.getElementById('crop');
+    //document.getElementById('kg').value=getParam('kg');
+    const doCrop=name=>{
+      const crop=fruits[name];
+      if(!crop)return;selectedCrop=crop;setParam('crop',name);
+      //console.log(crop)
+      if(crop.minWeight>document.getElementById('kg').value)
+        document.getElementById('kg').value=crop.minWeight;
+      //document.getElementById('kg').min=crop.minWeight
+      document.getElementById('minValue').value=crop.minValue;
+      //document.getElementById('minWeight').value=crop.minWeight;
+      document.getElementById('kg').min=
+      //document.getElementById('kg').value=
+      document.getElementById('minWeight').value=
+      crop.minWeight||0;update()
+    };//doCrop('Carrot')
+
+    Object.keys(fruits).sort()
+    .map(v=>
+      cropSelect.add(Object.assign(document.createElement('option'),{text:v,selected:v==cropName,disabled:!fruits[v].k}))
+    );doCrop(cropName);
+    cropSelect.onchange=(e)=>doCrop(e.target.value);
+
+    const craftRadios=document.querySelectorAll('input[name="craft"]');
+    craftRadios.forEach(radio=>radio.addEventListener('change',()=>{
+      const craft=Array.from(craftRadios).find(v=>v.checked).value;
+      setParam('craft',craft);
+      craftMulti=crafts[craft];
+      /*craftMulti=Array.from(craftRadios)
+      .filter(i=>i.checked).map(i=>crafts[i.value]).reduce((a,v)=>a+=v,0);*/
+      update();//document.getElementById('Multiplier').textContent=tempMulti+'x'
+    }));
+    setParam('craft',crafts[getParam('craft')]&&getParam('craft')||'None');
+    Array.from(craftRadios).find(v=>v.value==getParam('craft')).click();
+
+    const tempRadios=document.querySelectorAll('input[name="temp"]');
+    tempRadios.forEach(radio=>radio.addEventListener('change',()=>{
+      const temp=Array.from(tempRadios).find(v=>v.checked).value;
+      setParam('temp',temp);
+      tempMulti=temps[temp];
+      /*tempMulti=Array.from(tempRadios)
+      .filter(i=>i.checked).map(i=>temps[i.value]).reduce((a,v)=>a+=v,0);*/
+      update();//document.getElementById('Multiplier').textContent=craftMulti+'x'
+    }));
+    setParam('temp',temps[getParam('temp')]&&getParam('temp')||'None');
+    Array.from(tempRadios).find(v=>v.value==getParam('temp')).click();
+
+    const checkboxes=document.querySelectorAll('input[id="mutation"]');
+    checkboxes.forEach(checkbox=>checkbox.addEventListener('change',(e)=>{
+      //console.log(checkbox.name,checkbox.checked)
+      setParam('mutations',Array.from(checkboxes).filter(i=>i.checked).map(v=>v.name).join())
+      multiplier=1+Array.from(checkboxes)
+      .filter(i=>i.checked).map(i=>Number(i.value)).reduce((a,v)=>a+=v,0);
+      update();//document.getElementById('Multiplier').textContent=multiplier+'x'
+    }));
+    (getParam('mutations')||'').split(',').map(i=>{
+      i&&Array.from(checkboxes).find(v=>v.name==i).click();
+    })
+
+    //update();
+  </script>
+</html>
+
+<!-- Created by DiamondRoPlayz :) -->
