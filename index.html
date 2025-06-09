@@ -10,6 +10,7 @@
         font-family: 'Lato', sans-serif;
         font-weight: 900;
         user-select: none;
+        transition: all .25s linear;
       }
       input,select{
         background: #222;
@@ -23,12 +24,14 @@
       }
       input[type="number"]:enabled{
         box-shadow: 0 0 0 2px #999;
+        transition: all .25s linear;
       }
       input[type="number"]:enabled:focus{
         box-shadow: 0 0 0 2px #FFF;
       }
       label{
         color: #999;
+        transition: all .25s linear;
       }
       label:has(input){
         background: #222;
@@ -55,11 +58,18 @@
         color: #FFF;
         opacity: 1;
       }
+      label:has(input:hover){
+        color: #FFF;
+        opacity: .75;
+      }
       label:has(input[type="radio"]:checked){
         box-shadow: inset 0 0 0 2px #0069ff;
       }
       label:has(input[type="checkbox"]:checked){
         box-shadow: inset 0 0 0 2px #69ff69;
+      }
+      input[type="number"]:enabled:invalid{
+        box-shadow: 0 0 0 2px #ff6969;
       }
     </style>
   </head>
@@ -94,7 +104,7 @@
     <label for="kg">KG</label>
     <input name="kg" id="kg" value="0.24" type="number"step="0.01" oninput="update()">
     <label for="count">Quantity</label>
-    <input name="count" id="count" value="1" type="number"step="1" min="1" oninput="update()">
+    <input name="count" id="count" value="1" type="number"step="1" min="1" placeholder="1" oninput="update()">
     <br><br>
     <label>Multiplier</label>
     <span id="Multiplier">-</span>
@@ -423,11 +433,15 @@
       "Bloodlit": 3,
       "Plasma": 4,
       "Honey Glazed": 4,
+      "Heavenly":4,
+      //"Burnt":4,
       "Zombified": 24,
+      //"Twisted":29,
       "Shocked": 99,
       "Celestial": 119,
       "Disco": 124,
-      "Voidtouched": 134
+      "Voidtouched": 134,
+      "Dawnbound":149
     };
 
     const getParam=name=>new URL(window.location).searchParams.get(name);
@@ -459,11 +473,13 @@
     document.getElementById('kg').value=getParam('kg')||selectedCrop.minWeight;
     document.getElementById('count').value=getParam('count')||1;
 
+    document.getElementById('kg').onchange=e=>!e.target.value&&update(e.target.value=selectedCrop.minWeight);
     document.getElementById('kg').ondblclick=e=>update(e.target.value=selectedCrop.minWeight);
     document.getElementById('kg').onwheel=(e)=>{
       e.target.value=Math.max((e.target.valueAsNumber+(e.deltaY>0&&-.01||.01)).toFixed(2),e.target.min)
       e.preventDefault();e.stopPropagation();update();
     };
+    document.getElementById('count').onchange=e=>!e.target.value&&update(e.target.value=1);
     document.getElementById('count').ondblclick=e=>update(e.target.value=1);
     document.getElementById('count').onwheel=(e)=>{
       e.target.value=Math.max((e.target.valueAsNumber+(e.deltaY>0&&-1||1)).toFixed(0),1)
@@ -473,14 +489,16 @@
 
     var multiplier=1;var craftMulti=1;var tempMulti=0;var kg=selectedCrop.minWeight;var count=1;
     const update=()=>{
-      kg=document.getElementById('kg').value;setParam('kg',kg);
-      count=document.getElementById('count').value;setParam('count',count);
+      kg=Math.max(Number(document.getElementById('kg').value)||selectedCrop.minWeight,selectedCrop.minWeight);setParam('kg',kg);
+      //kg=document.getElementById('kg').value;setParam('kg',kg);
+      count=Math.max(parseInt(document.getElementById('count').value)||1,1);setParam('count',count);
+      //count=document.getElementById('count').value;setParam('count',count);
       var multi=craftMulti*(tempMulti+multiplier);
       document.getElementById('Multiplier').textContent=multi.toLocaleString()+' x'
       //if(!selectedCrop)return;
       const value=kg>selectedCrop.minWeight&&Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2)))||selectedCrop.minValue;
       //console.log(value)
-      document.getElementById('Value').textContent=(value*multi*document.getElementById('count').valueAsNumber).toLocaleString()+' $'
+      document.getElementById('Value').textContent=(value*multi*count).toLocaleString()+' $'
     }
     const cropSelect=document.getElementById('crop');
     //document.getElementById('kg').value=getParam('kg');
@@ -488,11 +506,11 @@
       const crop=fruits[name];
       if(!crop)return;selectedCrop=crop;setParam('crop',name);
       //console.log(crop)
-      if(crop.minWeight>document.getElementById('kg').value)
-        document.getElementById('kg').value=crop.minWeight;
+      if(crop.minWeight>document.getElementById('kg').value)document.getElementById('kg').value=crop.minWeight;
       //document.getElementById('kg').min=crop.minWeight
       document.getElementById('minValue').value=crop.minValue;
       //document.getElementById('minWeight').value=crop.minWeight;
+      document.getElementById('kg').placeholder=
       document.getElementById('kg').min=
       //document.getElementById('kg').value=
       document.getElementById('minWeight').value=
