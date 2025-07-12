@@ -84,16 +84,16 @@
 
     <br>
     <label for="Rarity">Rarity</label>
-    <label><input type="radio" name="craft" value="None"checked>None</label>
+    <!-- <label><input type="radio" name="craft" value="None"checked>None</label>
     <label><input type="radio" name="craft" value="Gold">Gold ( x20 )</label>
-    <label><input type="radio" name="craft" value="Rainbow">Rainbow ( x50 )</label>
+    <label><input type="radio" name="craft" value="Rainbow">Rainbow ( x50 )</label> -->
 
     <br>
     <label for="Temp">Temp</label>
-    <label><input type="radio" name="temp" value="None"checked>None</label>
+    <!-- <label><input type="radio" name="temp" value="None"checked>None</label>
     <label><input type="radio" name="temp" value="Wet">Wet ( +1 )</label>
     <label><input type="radio" name="temp" value="Chilled">Chilled ( +1 )</label>
-    <label><input type="radio" name="temp" value="Frozen">Frozen ( +9 )</label>
+    <label><input type="radio" name="temp" value="Frozen">Frozen ( +9 )</label> -->
     <br>
     <br>
     <label for="mutations">Mutations</label>
@@ -111,308 +111,572 @@
     <br>
     <label>Value</label>
     <span id="Value">-</span>
+    <br>
+    <br>
+    <label>Formula</label><br>
+    <span id="Formula">1 + 1 = 11</span>
   </body>
   <script>
     const fruits={
-      "Carrot": {
-        "minWeight": 0.24,
-        "k": 275,
-        "minValue": 18
-      },
-      "Chocolate Carrot": {
-        "minWeight": 0.26,
-        "k": 145096,
-        "minValue": 9928
-      },
-      "Strawberry": {
-        "minWeight": 0.29,
-        "k": 175,
-        "minValue": 14
-      },
-      "Blueberry": {
-        "minWeight": 0.17,
-        "k": 500,
-        "minValue": 18
-      },
-      "Orange Tulip": {
-        "minWeight": 0.05,
-        "k": 300000,
-        "minValue": 767
-      },
-      "Nightshade": {
-        "minWeight": 0.48,
-        "k": 13850,
-        "minValue": 3159
-      },
-      "Red Lollipop": {
-        "minWeight": 3.8,
-        "k": 3125,
-        "minValue": 45125
-      },
-      "Pear": {
-        "minWeight": 2.85,
-        "k": 55.5,
-        "minValue": 450
-      },
-      "Candy Sunflower": {
-        "minWeight": 1.43,
-        "k": 35413,
-        "minValue": 72200
-      },
-      "Tomato": {
-        "minWeight": 0.44,
-        "k": 120,
-        "minValue": 27
-      },
-      "Corn": {
-        "minWeight": 1.9,
-        "k": 10,
-        "minValue": 36
-      },
-      "Daffodil": {
-        "minWeight": 0.16,
-        "k": 25000,
-        "minValue": 903
-      },
-      "Raspberry": {
-        "minWeight": 0.71,
-        "k": 177.5,
-        "minValue": 90
-      },
-      "Glowshroom": {
-        "minWeight": 0.7,
-        "k": 532.5,
-        "minValue": 300
-      },
-      "Watermelon": {
-        "minWeight": 7.3,
-        "k": 61.25,
-        "minValue": 2708
-      },
-      "Pumpkin": {
-        "minWeight": 6.9,
-        "k": 64,
-        "minValue": 3069
-      },
       "Apple": {
         "minWeight": 2.85,
         "k": 30.53,
         "minValue": 248
+      },
+      "Aloe Vera": {
+        "minWeight": 5.22,
+        "k": 2285.34,
+        "minValue": 62272
+      },
+      "Avocado": {
+        "minWeight": 6.18,
+        "k": 8.27,
+        "minValue": 316
       },
       "Bamboo": {
         "minWeight": 3.8,
         "k": 250,
         "minValue": 3610
       },
-      "Cranberry": {
-        "minWeight": 0.95,
-        "k": 2000,
-        "minValue": 1805
-      },
-      "Durian": {
-        "minWeight": 7.6,
-        "k": 78.19,
-        "minValue": 4513
-      },
-      "Easter Egg": {
-        "minWeight": 2.85,
-        "k": 277.5,
-        "minValue": 2256
-      },
-      "Moonflower": {
-        "minWeight": 1.9,
-        "k": 2381,
-        "minValue": 8574
-      },
-      "Starfruit": {
-        "minWeight": 2.85,
-        "k": 1666.6,
-        "minValue": 13538
-      },
-      "Papaya": {
-        "minWeight": 2.86,
-        "k": 111.11,
-        "minValue": 1000
-      },
-      "Coconut": {
-        "minWeight": 13.31,
-        "k": 2.04,
-        "minValue": 361
-      },
-      "Cactus": {
-        "minWeight": 6.65,
-        "k": 69.4,
-        "minValue": 3068
-      },
-      "Dragon Fruit": {
-        "minWeight": 11.38,
-        "k": 32.99,
-        "minValue": 4287
-      },
-      "Mango": {
-        "minWeight": 14.28,
-        "k": 28.89,
-        "minValue": 5873
-      },
-      "Peach": {
-        "minWeight": 1.9,
-        "k": 75,
-        "minValue": 271
-      },
-      "Pineapple": {
-        "minWeight": 2.85,
-        "k": 222.5,
-        "minValue": 1805
-      },
-      "Eggplant": {
-        "minWeight": 4.75,
-        "k": 300,
-        "minValue": 6769
-      },
-      "Moonglow": {
-        "minWeight": 6.65,
-        "k": 408.45,
-        "minValue": 18050
-      },
-      "Passionfruit": {
-        "minWeight": 2.87,
-        "k": 395,
-        "minValue": 3204
-      },
-      "Lemon": {
-        "minWeight": "",
-        "k": "",
-        "minValue": 500
-      },
       "Banana": {
-        "minWeight": 1.43,
-        "k": 777.77,
+        "minWeight": 1.42,
+        "k": 893.3,
         "minValue": 1579
+      },
+      "Beanstalk": {
+        "minWeight": 9.5,
+        "k": 280,
+        "minValue": 25270
+      },
+      "Bee Balm": {
+        "minWeight": 0.94,
+        "k": 18033.333,
+        "minValue": 16245
+      },
+      "Bell Pepper": {
+        "minWeight": 7.61,
+        "k": 85.6,
+        "minValue": 4964
+      },
+      "Bendboo": {
+        "minWeight": 17.09,
+        "k": 478.96,
+        "minValue": 139888
       },
       "Blood Banana": {
         "minWeight": 1.42,
         "k": 2670,
         "minValue": 5415
       },
-      "Moon Melon": {
-        "minWeight": 7.6,
-        "k": 281.2,
-        "minValue": 16245
+      "Blueberry": {
+        "minWeight": 0.17,
+        "k": 500,
+        "minValue": 18
       },
-      "Grape": {
-        "minWeight": 2.85,
-        "k": 872,
-        "minValue": 7085
+      "Blue Lollipop": {
+        "minWeight": 0.95,
+        "k": 50000,
+        "minValue": 45125
       },
-      "Mushroom": {
-        "minWeight": 25.9,
-        "k": 241.6,
-        "minValue": 136278
+      "Boneboo": {
+        "minWeight": 14.25,
+        "k": 627.29,
+        "minValue": 127380
       },
-      "Pepper": {
-        "minWeight": 4.75,
-        "k": 320,
-        "minValue": 7220
+      "Bone Blossom": {
+        "minWeight": 6.65,
+        "k": 3751.43,
+        "minValue": 157938
+      },
+      "Burning Bud": {
+        "minWeight": 11.4,
+        "k": 846.4,
+        "minValue": 110000
       },
       "Cacao": {
         "minWeight": 7.6,
-        "k": 171.875,
+        "k": 187.5,
         "minValue": 10830
       },
-      "Moon Blossom": {
-        "minWeight": 2.85,
-        "k": 6170,
-        "minValue": 45125
-      },
-      "Cherry Blossom": {
-        "minWeight": "",
-        "k": "",
-        "minValue": 550
+      "Cactus": {
+        "minWeight": 6.65,
+        "k": 69.4,
+        "minValue": 3068
       },
       "Candy Blossom": {
         "minWeight": 2.85,
-        "k": 11111.1111,
+        "k": 11111.1112,
         "minValue": 90250
       },
-      "Lotus": {
-        "minWeight": 18.99,
-        "k": 42.5,
-        "minValue": 15343
+      "Candy Sunflower": {
+        "minWeight": 1.428,
+        "k": 35413,
+        "minValue": 72200
       },
-      "Venus Fly Trap": {
-        "minWeight": "",
-        "k": "",
-        "minValue": 17000
+      "Cantaloupe": {
+        "minWeight": 5.23,
+        "k": 1124,
+        "minValue": 30685
       },
-      "Cursed Fruit": {
-        "minWeight": "",
-        "k": "",
-        "minValue": 15000
+      "Carrot": {
+        "minWeight": 0.26,
+        "k": 266,
+        "minValue": 18
       },
-      "Soul Fruit": {
-        "minWeight": 23.75,
-        "k": 12.4,
-        "minValue": 3000
-      },
-      "Moon Mango": {
-        "minWeight": 14.25,
-        "k": 222.22,
-        "minValue": 45125
-      },
-      "Beanstalk": {
-        "minWeight": 9.5,
-        "k": 200,
-        "minValue": 25270
+      "Cauliflower": {
+        "minWeight": 4.74,
+        "k": 1.6,
+        "minValue": 36
       },
       "Celestiberry": {
         "minWeight": 1.9,
-        "k": 2000,
+        "k": 2500,
         "minValue": 9025
       },
-      "Rose": {
+      "Cherry Blossom": {
+        "minWeight": 2.85,
+        "k": 55.5,
+        "minValue": 451
+      },
+      "Chocolate Carrot": {
+        "minWeight": 0.262,
+        "k": 145096,
+        "minValue": 9928
+      },
+      "Coconut": {
+        "minWeight": 13.31,
+        "k": 2.04,
+        "minValue": 361
+      },
+      "Cocovine": {
+        "minWeight": 13.3,
+        "k": 340,
+        "minValue": 60166
+      },
+      "Corn": {
+        "minWeight": 1.9,
+        "k": 10,
+        "minValue": 36
+      },
+      "Cranberry": {
         "minWeight": 0.95,
-        "k": 5000,
-        "minValue": 4513
+        "k": 3500.28,
+        "minValue": 3159
+      },
+      "Crocus": {
+        "minWeight": 0.26,
+        "k": 400517.75,
+        "minValue": 27075
+      },
+      "Cursed Fruit": {
+        "minWeight": 28.5,
+        "k": 28.6,
+        "minValue": 23239
+      },
+      "Daffodil": {
+        "minWeight": 0.16,
+        "k": 25000,
+        "minValue": 903
+      },
+      "Dandelion": {
+        "minWeight": 3.79,
+        "k": 3130,
+        "minValue": 45125
+      },
+      "Delphinium": {
+        "minWeight": 0.57,
+        "k": 66666.67,
+        "minValue": 21660
+      },
+      "Dragon Fruit": {
+        "minWeight": 11.38,
+        "k": 32.99,
+        "minValue": 4287
+      },
+      "Dragon Pepper": {
+        "minWeight": 5.7,
+        "k": 2469.1,
+        "minValue": 80221
+      },
+      "Durian": {
+        "minWeight": 7.6,
+        "k": 117.19,
+        "minValue": 6769
+      },
+      "Easter Egg": {
+        "minWeight": 2.85,
+        "k": 277.825,
+        "minValue": 2256
+      },
+      "Eggplant": {
+        "minWeight": 4.75,
+        "k": 480,
+        "minValue": 10830
+      },
+      "Elephant Ears": {
+        "minWeight": 17.1,
+        "k": 237.6,
+        "minValue": 69493
+      },
+      "Ember Lily": {
+        "minWeight": 11.4,
+        "k": 385.6,
+        "minValue": 50000
+      },
+      "Feijoa": {
+        "minWeight": 9.5,
+        "k": 130,
+        "minValue": 11733
+      },
+      "Firefly Fern": {
+        "minWeight": 5,
+        "k": 2599.2,
+        "minValue": 64980
+      },
+      "Firework Flower": {
+        "minWeight": 19,
+        "k": 374.73,
+        "minValue": 136278
+      },
+      "Fossilight": {
+        "minWeight": 3.8,
+        "k": 5500,
+        "minValue": 79420
       },
       "Foxglove": {
         "minWeight": 1.9,
         "k": 5000,
         "minValue": 18050
       },
-      "Lilac": {
+      "Glowshroom": {
+        "minWeight": 0.7,
+        "k": 532.5,
+        "minValue": 271
+      },
+      "Grape": {
         "minWeight": 2.85,
+        "k": 872,
+        "minValue": 7085
+      },
+      "Green Apple": {
+        "minWeight": 2.85,
+        "k": 33.36,
+        "minValue": 271
+      },
+      "Guanabana": {
+        "minWeight": 3.27,
+        "k": 6119.11,
+        "minValue": 65431
+      },
+      "Hive Fruit": {
+        "minWeight": 7.6,
+        "k": 968.75,
+        "minValue": 55955
+      },
+      "Honeysuckle": {
+        "minWeight": 11.4,
+        "k": 694.3,
+        "minValue": 90250
+      },
+      "Horned Dinoshroom": {
+        "minWeight": 4.75,
+        "k": 2759.98,
+        "minValue": 62272
+      },
+      "Kiwi": {
+        "minWeight": 4.75,
+        "k": 110,
+        "minValue": 2482
+      },
+      "Lavender": {
+        "minWeight": 0.25,
+        "k": 361008,
+        "minValue": 22563
+      },
+      "Lemon": {
+        "minWeight": 0.95,
+        "k": 350,
+        "minValue": 316
+      },
+      "Liberty Lily": {
+        "minWeight": 6.17,
+        "k": 711.2,
+        "minValue": 27075
+      },
+      "Lilac": {
+        "minWeight": 2.846,
         "k": 3899,
         "minValue": 31588
       },
-      "Pink Lily": {
+      "Lily Of The Valley": {
+        "minWeight": 5.69,
+        "k": 1369.25,
+        "minValue": 44331
+      },
+      "Loquat": {
+        "minWeight": 6.17,
+        "k": 189.65,
+        "minValue": 7220
+      },
+      "Lotus": {
+        "minWeight": 19,
+        "k": 87.5,
+        "minValue": 31588
+      },
+      "Lumira": {
+        "minWeight": 5.69,
+        "k": 2362.5,
+        "minValue": 76713
+      },
+      "Mango": {
+        "minWeight": 14.28,
+        "k": 28.89,
+        "minValue": 5866
+      },
+      "Manuka Flower": {
+        "minWeight": 0.289,
+        "k": 270000,
+        "minValue": 22563
+      },
+      "Mega Mushroom": {
+        "minWeight": 66.5,
+        "k": 0.1,
+        "minValue": 451
+      },
+      "Mint": {
+        "minWeight": 0.95,
+        "k": 5249.86,
+        "minValue": 4738
+      },
+      "Moon Blossom": {
+        "minWeight": 2.85,
+        "k": 7407.4,
+        "minValue": 60166
+      },
+      "Moon Mango": {
+        "minWeight": 14.25,
+        "k": 222.22,
+        "minValue": 45125
+      },
+      "Moon Melon": {
+        "minWeight": 7.6,
+        "k": 281.2,
+        "minValue": 16245
+      },
+      "Moonflower": {
+        "minWeight": 1.9,
+        "k": 2381,
+        "minValue": 8574
+      },
+      "Moonglow": {
+        "minWeight": 6.65,
+        "k": 510.22,
+        "minValue": 22563
+      },
+      "Mushroom": {
+        "minWeight": 25.9,
+        "k": 241.6,
+        "minValue": 136278
+      },
+      "Nectar Thorn": {
+        "minWeight": 6.65,
+        "k": 907,
+        "minValue": 40111
+      },
+      "Nectarine": {
+        "minWeight": 2.85,
+        "k": 5333.33,
+        "minValue": 43320
+      },
+      "Nectarshade": {
+        "minWeight": 0.75,
+        "k": 78500,
+        "minValue": 45125
+      },
+      "Nightshade": {
+        "minWeight": 0.48,
+        "k": 13850,
+        "minValue": 3159
+      },
+      "Orange Tulip": {
+        "minWeight": 0.05,
+        "k": 300000,
+        "minValue": 767
+      },
+      "Noble Flower": {
+        "minWeight": 4.75,
+        "k": 800,
+        "minValue": 18050
+      },
+      "Papaya": {
+        "minWeight": 2.86,
+        "k": 111.11,
+        "minValue": 903
+      },
+      "Paradise Petal": {
+        "minWeight": 0,
+        "k": 66666.67,
+        "minValue": 25000
+      },
+      "Parasol Flower": {
         "minWeight": 5.7,
+        "k": 5087.72,
+        "minValue": 165300
+      },
+      "Passionfruit": {
+        "minWeight": 2.867,
+        "k": 395,
+        "minValue": 3204
+      },
+      "Peace Lily": {
+        "minWeight": 0.57,
+        "k": 67713.14,
+        "minValue": 22000
+      },
+      "Peach": {
+        "minWeight": 1.9,
+        "k": 75,
+        "minValue": 271
+      },
+      "Pear": {
+        "minWeight": 2.85,
+        "k": 2222.2,
+        "minValue": 18050
+      },
+      "Pepper": {
+        "minWeight": 4.75,
+        "k": 320,
+        "minValue": 7220
+      },
+      "Pineapple": {
+        "minWeight": 2.85,
+        "k": 222.5,
+        "minValue": 1805
+      },
+      "Pink Lily": {
+        "minWeight": 5.699,
         "k": 1806.5,
         "minValue": 58663
+      },
+      "Pink Tulip": {
+        "minWeight": 0.05,
+        "k": 306800,
+        "minValue": 767
+      },
+      "Prickly Pear": {
+        "minWeight": 6.65,
+        "k": 142.9,
+        "minValue": 6319
+      },
+      "Pumpkin": {
+        "minWeight": 6.9,
+        "k": 64,
+        "minValue": 3700
+      },
+      "Purple Cabbage": {
+        "minWeight": 4.75,
+        "k": 19.99,
+        "minValue": 451
       },
       "Purple Dahlia": {
         "minWeight": 11.4,
         "k": 522,
         "minValue": 67688
       },
-      "Nectarine": {
-        "minWeight": 2.81,
-        "k": 4440,
-        "minValue": 36100
+      "Rafflesia": {
+        "minWeight": 0,
+        "k": 0,
+        "minValue": 3159
       },
-      "Hive Fruit": {
-        "minWeight": 7.6,
-        "k": 781.5,
+      "Raspberry": {
+        "minWeight": 0.71,
+        "k": 177.5,
+        "minValue": 90
+      },
+      "Red Lollipop": {
+        "minWeight": 3.799,
+        "k": 3125,
         "minValue": 45125
       },
-      "Sunflower": {
-        "minWeight": 14.23,
-        "k": 666.6,
-        "minValue": 135375
-      },
-      "Mint": {
+      "Rose": {
         "minWeight": 0.95,
-        "k": 5230,
-        "minValue": 6434
+        "k": 5000,
+        "minValue": 4513
+      },
+      "Rosy Delight": {
+        "minWeight": 9.5,
+        "k": 690,
+        "minValue": 62273
+      },
+      "Soul Fruit": {
+        "minWeight": 23.75,
+        "k": 12.4,
+        "minValue": 6994
+      },
+      "Starfruit": {
+        "minWeight": 2.85,
+        "k": 1666.6,
+        "minValue": 13538
+      },
+      "Stonebite": {
+        "minWeight": 0,
+        "k": 66666.67,
+        "minValue": 35000
+      },
+      "Strawberry": {
+        "minWeight": 0.29,
+        "k": 175,
+        "minValue": 14
+      },
+      "Succulent": {
+        "minWeight": 4.75,
+        "k": 1000,
+        "minValue": 22563
+      },
+      "Sugar Apple": {
+        "minWeight": 8.55,
+        "k": 592.6,
+        "minValue": 43320
+      },
+      "Suncoil": {
+        "minWeight": 9.5,
+        "k": 800,
+        "minValue": 72200
+      },
+      "Sunflower": {
+        "minWeight": 15.68,
+        "k": 587.3,
+        "minValue": 144400
+      },
+      "Tomato": {
+        "minWeight": 0.44,
+        "k": 120,
+        "minValue": 27
+      },
+      "Travelers Fruit": {
+        "minWeight": 14.25,
+        "k": 262.22,
+        "minValue": 53248
+      },
+      "Venus Fly Trap": {
+        "minWeight": 9.5,
+        "k": 850,
+        "minValue": 76713
+      },
+      "Violet Corn": {
+        "minWeight": 2.85,
+        "k": 5555.555,
+        "minValue": 45125
+      },
+      "Watermelon": {
+        "minWeight": 7.3,
+        "k": 61.25,
+        "minValue": 2708
+      },
+      "Wild Carrot": {
+        "minWeight": 0.286,
+        "k": 275000,
+        "minValue": 22563
       }
     }
     const crafts={
@@ -424,6 +688,7 @@
       None:0,
       Wet:1,
       Chilled:1,
+      Drenched:4,// ?
       Frozen:9
     }
     const mutations={
@@ -441,13 +706,14 @@
       "Burnt":4,
       "Twisted":4, // not 29
       "Verdant":4,
-      "Drenched":4,
+      //"Drenched":4,
       "Cloudtouched":4,
       "Fried":7,
+      "Cooked":9,
       "Amber":9,
       "OldAmber":19,
       "Zombified": 24,
-      "Cooked":24,
+      //"Cooked":24,
       "Molten":24,
       //"Twisted":29,
       "Ceramic":29,
@@ -462,7 +728,7 @@
       "Disco": 124,
       "Meteoric":124,
       "Voidtouched": 134,
-      "HistoricAmber":149,
+      //"HistoricAmber":149,
       "Dawnbound":149
     };
     const colours={
@@ -476,6 +742,7 @@
       Frozen:0x6cb8ff,
 
       "Chocolate": 0x5c4033,
+      "Choc": 0x5c4033,
       "Moonlit": 0x998dff,
       "Windstruck":0xa2b9d1,
       "Pollinated": 0xffaa00,
@@ -515,6 +782,20 @@
       history.pushState(null,'',url);
     }
 
+    const label4Rarity=document.querySelector('label[for="Rarity"]');
+    Object.entries(crafts).reverse().map(([i,v])=>
+    label4Rarity.parentNode.insertBefore(Object.assign(document.createElement('label'),{
+        innerHTML:`<input type="radio"name="craft"value="${i}">${i}`+(v-1?` ( x${v} )`:'')
+      }),label4Rarity.nextSibling)
+    );
+
+    const label4Temp=document.querySelector('label[for="Temp"]');
+    Object.entries(temps).reverse().map(([i,v])=>
+      label4Temp.parentNode.insertBefore(Object.assign(document.createElement('label'),{
+        innerHTML:`<input type="radio"name="temp"value="${i}">${i}`+(v?` ( +${v} )`:'')
+      }),label4Temp.nextSibling)
+    );
+
     document.getElementById('mutations').append(
       ...Object.entries(mutations)
       .map(([i,v])=>{
@@ -526,6 +807,8 @@
         return label
       })
     )
+
+    //const BigNum=n=>n>=1e9?"".concat((n/1e9).toFixed(1),"B"):n>=1e6?"".concat((n/1e6).toFixed(1),"M"):n>=1e3?"".concat((n/1e3).toFixed(1),"K"):n.toString();
 
     var cropName=fruits[getParam('crop')]&&getParam('crop')||Object.keys(fruits).sort()[0];
     var selectedCrop=fruits[cropName];
@@ -545,6 +828,7 @@
       e.preventDefault();e.stopPropagation();update();
     };
 
+    const checkboxes=document.querySelectorAll('input[id="mutation"]');
 
     var multiplier=1;var craftMulti=1;var tempMulti=0;var kg=selectedCrop.minWeight;var count=1;
     const update=()=>{
@@ -552,12 +836,18 @@
       //kg=document.getElementById('kg').value;setParam('kg',kg);
       count=Math.max(parseInt(document.getElementById('count').value)||1,1);setParam('count',count);
       //count=document.getElementById('count').value;setParam('count',count);
-      var multi=craftMulti*(tempMulti+multiplier);
+      //const k=selectedCrop.minValue*(kg/selectedCrop.minWeight)**2;
+      //console.log(k,Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2))))
+      var multi=craftMulti*(tempMulti+(multiplier));
       document.getElementById('Multiplier').textContent=multi.toLocaleString()+' x'
       //if(!selectedCrop)return;
       const value=kg>selectedCrop.minWeight&&Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2)))||selectedCrop.minValue;
       //console.log(value)
-      document.getElementById('Value').textContent=(value*multi*count).toLocaleString()+' $'
+      //document.getElementById('Value').textContent=(value*multi*count).toLocaleString()+' $'
+      const finalValue=value*multi*count;
+      document.getElementById('Value').textContent=finalValue.toLocaleString()+' $'//+` ${BigNum(finalValue)}`;
+      document.getElementById('Formula').textContent=`${value} * ${craftMulti} * ${tempMulti+(multiplier)}( ${ [tempMulti,1,...Array.from(checkboxes)
+      .filter(i=>i.checked).map(i=>Number(i.value))].join(' + ') } ) * ${count}`;
     }
     const cropSelect=document.getElementById('crop');
     //document.getElementById('kg').value=getParam('kg');
@@ -607,7 +897,7 @@
     setParam('temp',temps[getParam('temp')]&&getParam('temp')||'None');
     Array.from(tempRadios).find(v=>v.value==getParam('temp')).click();
 
-    const checkboxes=document.querySelectorAll('input[id="mutation"]');
+    //const checkboxes=document.querySelectorAll('input[id="mutation"]');
     checkboxes.forEach(checkbox=>checkbox.addEventListener('change',(e)=>{
       //console.log(checkbox.name,checkbox.checked)
       setParam('mutations',Array.from(checkboxes).filter(i=>i.checked).map(v=>v.name).join())
