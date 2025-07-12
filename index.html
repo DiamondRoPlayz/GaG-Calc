@@ -102,7 +102,7 @@
     </div>
     <br>
     <label for="kg">KG</label>
-    <input name="kg" id="kg" value="0.24" type="number"step="0.01" oninput="update()">
+    <input name="kg" id="kg" value="0.24" type="number"step="0.01" min="0.00" oninput="update()">
     <label for="count">Quantity</label>
     <input name="count" id="count" value="1" type="number"step="1" min="1" placeholder="1" oninput="update()">
     <br><br>
@@ -429,20 +429,79 @@
     const mutations={
       "Chocolate": 1,
       "Moonlit": 1,
+      "Windstruck":1,
       "Pollinated": 2,
+      "Sandy":2,
+      "Clay":2,
       "Bloodlit": 3,
+      "Wiltproof":3,
       "Plasma": 4,
       "Honey Glazed": 4,
       "Heavenly":4,
-      //"Burnt":4,
+      "Burnt":4,
+      "Twisted":4, // not 29
+      "Verdant":4,
+      "Drenched":4,
+      "Cloudtouched":4,
+      "Fried":7,
+      "Amber":9,
+      "OldAmber":19,
       "Zombified": 24,
+      "Cooked":24,
+      "Molten":24,
       //"Twisted":29,
+      "Ceramic":29,
+      "AncientAmber":49,
+      "Sundried":84,
+      "Aurora":89,
       "Shocked": 99,
+      "Alienlike":99,
+      "Paradisal":99,
       "Celestial": 119,
+      "Galactic":119,
       "Disco": 124,
+      "Meteoric":124,
       "Voidtouched": 134,
+      "HistoricAmber":149,
       "Dawnbound":149
     };
+    const colours={
+      //None:0,
+      Gold:0xffd700,
+      //Rainbow:0,
+
+      //None:0,
+      Wet:0x40a4df,
+      Chilled:0,
+      Frozen:0x6cb8ff,
+
+      "Chocolate": 0x5c4033,
+      "Moonlit": 0x998dff,
+      "Windstruck":0xa2b9d1,
+      "Pollinated": 0xffaa00,
+      "Sandy":0,
+      "Clay":0x966450,
+      "Bloodlit": 0xc80000,
+      "Plasma": 0xd02b89,
+      "Honey Glazed": 0xffcc00,
+      "Heavenly":0xfff9a0,
+      "Burnt":0,
+      "Verdant":0,
+      "Zombified": 0x80c77f,
+      "Cooked":0,
+      "Molten":0xdf6400,
+      "Ceramic":0xeab892,
+      "Twisted":0xbfbfbf,
+      "Sundried":0,
+      "Aurora":0x6359af,
+      "Shocked": 0xffff64,
+      "Alienlike":0,
+      "Celestial":0xff00ff,
+      "Galactic":0,
+      "Disco": 0xff69b4,
+      "Voidtouched": 0,
+      "Dawnbound":0
+    }
 
     const getParam=name=>new URL(window.location).searchParams.get(name);
     const setParam=(name,value)=>{
@@ -460,7 +519,7 @@
       ...Object.entries(mutations)
       .map(([i,v])=>{
         //`<label><input type="radio" name="temp" value="Wet">Wet</label>`
-        const label=Object.assign(document.createElement('label'),{text:v});
+        const label=Object.assign(document.createElement('label'),{text:v,style:colours[i]&&`color:#${colours[i].toString(16)}`||''});
         const input=Object.assign(document.createElement('input'),{type:'checkbox',id:'mutation',value:v,name:i});
         label.appendChild(input,"hello")
         label.append(`${i} ( +${v} )`)
@@ -511,7 +570,7 @@
       document.getElementById('minValue').value=crop.minValue;
       //document.getElementById('minWeight').value=crop.minWeight;
       document.getElementById('kg').placeholder=
-      document.getElementById('kg').min=
+      //document.getElementById('kg').min=
       //document.getElementById('kg').value=
       document.getElementById('minWeight').value=
       crop.minWeight||0;update()
@@ -524,26 +583,27 @@
     cropSelect.onchange=(e)=>doCrop(e.target.value);
 
     const craftRadios=document.querySelectorAll('input[name="craft"]');
-    craftRadios.forEach(radio=>radio.addEventListener('change',()=>{
+    craftRadios.forEach(radio=>(
+      radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16)}`||'',radio.addEventListener('change',()=>{
       const craft=Array.from(craftRadios).find(v=>v.checked).value;
       setParam('craft',craft);
       craftMulti=crafts[craft];
       /*craftMulti=Array.from(craftRadios)
       .filter(i=>i.checked).map(i=>crafts[i.value]).reduce((a,v)=>a+=v,0);*/
       update();//document.getElementById('Multiplier').textContent=tempMulti+'x'
-    }));
+    })));
     setParam('craft',crafts[getParam('craft')]&&getParam('craft')||'None');
     Array.from(craftRadios).find(v=>v.value==getParam('craft')).click();
 
     const tempRadios=document.querySelectorAll('input[name="temp"]');
-    tempRadios.forEach(radio=>radio.addEventListener('change',()=>{
+    tempRadios.forEach(radio=>(radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16)}`||'',radio.addEventListener('change',()=>{
       const temp=Array.from(tempRadios).find(v=>v.checked).value;
       setParam('temp',temp);
       tempMulti=temps[temp];
       /*tempMulti=Array.from(tempRadios)
       .filter(i=>i.checked).map(i=>temps[i.value]).reduce((a,v)=>a+=v,0);*/
       update();//document.getElementById('Multiplier').textContent=craftMulti+'x'
-    }));
+    })));
     setParam('temp',temps[getParam('temp')]&&getParam('temp')||'None');
     Array.from(tempRadios).find(v=>v.value==getParam('temp')).click();
 
