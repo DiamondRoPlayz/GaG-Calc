@@ -112,7 +112,7 @@
       input[type="number"]:enabled:invalid{
         box-shadow: 0 0 0 2px #ff6969;
       }
-      label:has(input[value="Rainbow"]){
+      label:has(input[value="Rainbow"]),#Rainbow{
         animation:rainbow 5s linear;
         animation-iteration-count:infinite;
       }
@@ -896,7 +896,11 @@
       e.preventDefault();e.stopPropagation();update();
     };
 
+    const craftRadios=document.querySelectorAll('input[name="craft"]');
+    const tempRadios=document.querySelectorAll('input[name="temp"]');
     const checkboxes=document.querySelectorAll('input[id="mutation"]');
+    
+    const getColour=v=>'#'+(colours[v]?colours[v]?.toString(16)?.padStart(6,'0'):'');
 
     var multiplier=1;var craftMulti=1;var tempMulti=0;var kg=selectedCrop.minWeight;var count=1;
     const update=()=>{
@@ -914,8 +918,18 @@
       //document.getElementById('Value').textContent=(value*multi*count).toLocaleString()+' $'
       const finalValue=value*multi*count;
       document.getElementById('Value').textContent=finalValue.toLocaleString()+' $'//+` ${BigNum(finalValue)}`;
-      document.getElementById('Formula').textContent=`${value} * ${craftMulti} * ${tempMulti+(multiplier)}( ${ [tempMulti,1,...Array.from(checkboxes)
-      .filter(i=>i.checked).map(i=>Number(i.value))].join(' + ') } ) * ${count}`;
+
+      const craft=Array.from(craftRadios).find(v=>v.checked)?.value;console.log(craft)
+      const temp=Array.from(tempRadios).find(v=>v.checked)?.value;console.log(temp)
+
+      //document.getElementById('Formula').innerHTML=`${value}(Value) * <c id=${craft}>${craftMulti}(${craft})</c> * ${tempMulti+(multiplier)}( ${ [`<c style="color:${getColour(temp)}">`+tempMulti+'</c>',1,...Array.from(checkboxes)
+      //.filter(i=>i.checked).map(i=>`<c title=${i.name} style="color:${getColour(i.name)}">${Number(i.value)}</c>`)].join(' + ') } ) * ${count}(Quantity)`;
+      document.getElementById('Formula').innerHTML=[
+        `${value}(Value)`,
+        `<c style="color:${getColour(craft)}"id=${craft}>${craftMulti}(${craft})</c>`,
+        `${tempMulti+(multiplier)}( ${ [`<c style="color:${getColour(temp)}">`+tempMulti+'</c>',1,...Array.from(checkboxes).filter(i=>i.checked).map(i=>`<c title=${i.name} style="color:${getColour(i.name)}">${Number(i.value)}</c>`)].join(' + ') } )`,
+        `${count}(Quantity)`
+      ].join(' × ')
     }
     const cropSelect=document.getElementById('crop');
     //document.getElementById('kg').value=getParam('kg');
@@ -940,7 +954,7 @@
     );doCrop(cropName);
     cropSelect.onchange=(e)=>doCrop(e.target.value);
 
-    const craftRadios=document.querySelectorAll('input[name="craft"]');
+    //const craftRadios=document.querySelectorAll('input[name="craft"]');
     craftRadios.forEach(radio=>(
       radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16).padStart(6,'0')}`||'',radio.addEventListener('change',()=>{
       const craft=Array.from(craftRadios).find(v=>v.checked).value;
@@ -953,7 +967,7 @@
     setParam('craft',crafts[getParam('craft')]&&getParam('craft')||'None');
     Array.from(craftRadios).find(v=>v.value==getParam('craft')).click();
 
-    const tempRadios=document.querySelectorAll('input[name="temp"]');
+    //const tempRadios=document.querySelectorAll('input[name="temp"]');
     tempRadios.forEach(radio=>(radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16).padStart(6,'0')}`||'',radio.addEventListener('change',()=>{
       const temp=Array.from(tempRadios).find(v=>v.checked).value;
       setParam('temp',temp);
