@@ -3,8 +3,18 @@
 <html>
   <head>
     <title>GaG Calc</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"name="viewport">
     <style>
-      @keyframes rainbow{
+      @keyframes Transcendent {
+        100%,0%{
+          color: rgb(0,0,255);
+        }
+        50%{
+          color: rgb(127,0,255);
+        }
+      }
+      /* Prismatic */
+      @keyframes Prismatic{
         100%,0%{
           color: rgb(255,0,0);
         }
@@ -94,6 +104,7 @@
       label:has(input){
         color:#999;
         opacity:.5;
+        /* -webkit-text-stroke: 1px #999; */
       }
       label:has(input:checked){
         color: #FFF;
@@ -112,10 +123,17 @@
       input[type="number"]:enabled:invalid{
         box-shadow: 0 0 0 2px #ff6969;
       }
-      label:has(input[value="Rainbow"]),#Rainbow{
-        animation:rainbow 5s linear;
+      label:has(input[value="Rainbow"]),#Rainbow,#Prismatic{
+        animation:Prismatic 5s linear;
         animation-iteration-count:infinite;
       }
+      #Transcendent{
+        animation:Transcendent 5s linear;
+        animation-iteration-count:infinite;
+      }
+      /* #crop{
+        color:#FFF;
+      } */
     </style>
   </head>
   <body>
@@ -808,11 +826,11 @@
       "Plasma":0xd02b89,
       "Honey Glazed":0xffcc00,
       "Heavenly":0xfff9a0,
-      //"Burnt":0,
+      "Burnt":0x282828,
       "Twisted":0xbfbfbf,
       //"Verdant":0,
       "Cloudtouched":0xe1ffff,
-      //"Fried":0,
+      "Fried":0xdf6e22,
       //"Cooked":0,
       "Amber":0xffc000,
       "Tempestuous":0x8fa3b4,
@@ -821,12 +839,12 @@
       "Molten":0xdf6400,
       "Ceramic":0xeab892,
       "AncientAmber":0xcc4400,
-      //"Friendbound":0,
+      "Friendbound":0xff007f,
       "Infected":0x43a700,
       "Sundried":0xcf5d00,
       "Aurora":0x6359af,
       "Shocked": 0xffff64,
-      //"Alienlike":0,
+      "Alienlike":0x00dfc5,
       "Paradisal":0xb0f000,
       "Celestial":0xff00ff,
       //"Galactic":0,
@@ -834,6 +852,25 @@
       //"Meteoric":0,
       "Voidtouched":0xe100ff,
       //"Dawnbound":0
+
+      "Common":0xa9a9a9,
+      "Uncommon":0x52a861,
+      "Rare":0x0776fd,
+      "Legendary":0xfdfd00,
+      "Mythical":0xa954fd,
+      "Divine":0xfd5400,
+      "Prismatic":0,
+      "Transcendent":0,
+    }
+    const rarityFruits={
+      Common:['Carrot','Strawberry','Pink Tulip','Chocolate Carrot'],
+      Uncommon:['Blueberry','Rose','Orange Tulip','Stonebite','Red Lollipop','Nightshade','Crocus','Lavender','Manuka Flower','Wild Carrot','Blue Lollipop'],
+      Rare:['Tomato','Daffodil','Cauliflower','Raspberry','Foxglove','Peace Lily','Corn','Paradise Petal','Horsetail','Candy Sunflower','Mint','Glowshroom','Dandelion','Nectarshade','Succulent','Bee Balm','Pear','Delphinium','Liberty Lily','Noble Flower'],
+      Legendary:['Watermelon','Pumpkin','Avocado','Green Apple','Banana','Lilac','Aloe Vera','Bamboo','Rafflesia','Lingonberry','Horned Dinoshroom','Boneboo','Cranberry','Durian','Papaya','Moonflower','Starfruit','Lumira','Violet Corn','Nectar Thorn','Cantaloupe','Firework Flower','White Mulberry'],
+      Mythical:['Peach','Pineapple','Guanabana','Amber Spine','Coconut','Cactus','Dragon Fruit','Mango','Kiwi (Crop)','Bell Pepper','Prickly Pear','Pink Lily','Purple Dahlia','Firefly Fern','Easter Egg','Eggplant','Passionfruit','Lemon','Moonglow','Moon Melon','Blood Banana','Celestiberry','Nectarine','Honeysuckle','Suncoil','Bendboo','Cocovine','Parasol Flower','Lily Of The Valley','Ice Cream Bean','Lime'],
+      Divine:['Grape','Loquat','Mushroom','Pepper','Cacao','Feijoa','Pitcher Plant','Grand Volcania','Sunflower','Fossilight','Cherry Blossom','Crimson Vine','Candy Blossom','Lotus','Venus Fly Trap','Cursed Fruit','Soul Fruit','Mega Mushroom','Moon Blossom','Moon Mango','Hive Fruit','Dragon Pepper','Rosy Delight',"Traveler's Fruit"],
+      Prismatic:['Beanstalk','Ember Lily','Sugar Apple','Burning Bud','Giant Pinecone','Elephant Ears'],
+      Transcendent:['Bone Blossom'],
     }
 
     const getParam=name=>new URL(window.location).searchParams.get(name);
@@ -868,8 +905,11 @@
         //`<label><input type="radio" name="temp" value="Wet">Wet</label>`
         const label=Object.assign(document.createElement('label'),{text:v,style:colours[i]&&`color:#${colours[i].toString(16).padStart(6,'0')}`||''});
         const input=Object.assign(document.createElement('input'),{type:'checkbox',id:'mutation',value:v,name:i});
-        label.appendChild(input,"hello")
-        label.append(`${i} ( +${v} )`)
+        //label.appendChild(input);
+        label.append(input,`${i} ( +${v} )`);
+        // Object.entries(rarityFruits).map(([rarity,fruit])=>{
+
+        // })
         return label
       })
     )
@@ -911,14 +951,15 @@
       var multi=craftMulti*(tempMulti+(multiplier));
       document.getElementById('Multiplier').textContent=multi.toLocaleString()+' x'
       //if(!selectedCrop)return;
-      const value=kg>selectedCrop.minWeight&&Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2)))||selectedCrop.minValue;
+      //const value=kg>selectedCrop.minWeight&&Math.ceil(Math.max(selectedCrop.k*Math.pow(kg,2)))||selectedCrop.minValue;
+      const value=kg>selectedCrop.minWeight&&selectedCrop.k*Math.pow(kg,2)||selectedCrop.minValue;
       //console.log(value)
       //document.getElementById('Value').textContent=(value*multi*count).toLocaleString()+' $'
       const finalValue=value*multi*count;
       document.getElementById('Value').textContent=finalValue.toLocaleString()+' $'//+` ${BigNum(finalValue)}`;
 
-      const craft=Array.from(craftRadios).find(v=>v.checked)?.value;console.log(craft)
-      const temp=Array.from(tempRadios).find(v=>v.checked)?.value;console.log(temp)
+      const craft=Array.from(craftRadios).find(v=>v.checked)?.value;//console.log(craft)
+      const temp=Array.from(tempRadios).find(v=>v.checked)?.value;//console.log(temp)
 
       //document.getElementById('Formula').innerHTML=`${value}(Value) * <c id=${craft}>${craftMulti}(${craft})</c> * ${tempMulti+(multiplier)}( ${ [`<c style="color:${getColour(temp)}">`+tempMulti+'</c>',1,...Array.from(checkboxes)
       //.filter(i=>i.checked).map(i=>`<c title=${i.name} style="color:${getColour(i.name)}">${Number(i.value)}</c>`)].join(' + ') } ) * ${count}(Quantity)`;
@@ -934,6 +975,12 @@
     const doCrop=name=>{
       const crop=fruits[name];
       if(!crop)return;selectedCrop=crop;setParam('crop',name);
+      //cropSelect.id=rarityFruits.Prismatic.includes(name)?'Rainbow':''
+      cropSelect.style=rarityFruits.Prismatic.includes(name)
+      &`animation:Prismatic 5s linear;animation-iteration-count:infinite`
+      ||rarityFruits.Transcendent.includes(name)
+      &&`animation:Transcendent 5s linear;animation-iteration-count:infinite`
+      ||`color:${getColour(Object.entries(rarityFruits).find(([a,b])=>b.includes(name))?.[0])}`;
       //console.log(crop)
       if(crop.minWeight>document.getElementById('kg').value)document.getElementById('kg').value=crop.minWeight;
       //document.getElementById('kg').min=crop.minWeight
@@ -947,8 +994,9 @@
     };//doCrop('Carrot')
 
     Object.keys(fruits).sort()
-    .map(v=>
-      cropSelect.add(Object.assign(document.createElement('option'),{text:v,selected:v==cropName,disabled:!fruits[v].k}))
+    .map(v=>//console.log(Object.entries(rarityFruits).find(([a,b])=>b.includes(v))?.[0])
+      cropSelect.add(Object.assign(document.createElement('option'),{id:rarityFruits.Prismatic.includes(v)?'Rainbow':rarityFruits.Transcendent.includes(v)?'Transcendent':'',text:v,selected:v==cropName,disabled:!fruits[v].k,style:`color:${getColour(Object.entries(rarityFruits).find(([a,b])=>b.includes(v))?.[0]||'Common')}`}))
+      //cropSelect.add(Object.assign(document.createElement('option'),{text:v,selected:v==cropName,disabled:!fruits[v].k,style:'color:red'}))
     );doCrop(cropName);
     cropSelect.onchange=(e)=>doCrop(e.target.value);
 
