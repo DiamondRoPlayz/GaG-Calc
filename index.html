@@ -4,6 +4,47 @@
   <head>
     <title>GaG Calc</title>
     <style>
+      @keyframes rainbow{
+        100%,0%{
+          color: rgb(255,0,0);
+        }
+        8%{
+          color: rgb(255,127,0);
+        }
+        16%{
+          color: rgb(255,255,0);
+        }
+        25%{
+          color: rgb(127,255,0);
+        }
+        33%{
+          color: rgb(0,255,0);
+        }
+        41%{
+          color: rgb(0,255,127);
+        }
+        50%{
+          color: rgb(0,255,255);
+        }
+        58%{
+          color: rgb(0,127,255);
+        }
+        66%{
+          color: rgb(0,0,255);
+        }
+        75%{
+          color: rgb(127,0,255);
+        }
+        83%{
+          color: rgb(255,0,255);
+        }
+        91%{
+          color: rgb(255,0,127);
+        }
+      }
+      html{
+        color-scheme:dark only;
+      }
       body{
         background: #111;
         color: #fff;
@@ -70,6 +111,10 @@
       }
       input[type="number"]:enabled:invalid{
         box-shadow: 0 0 0 2px #ff6969;
+      }
+      label:has(input[value="Rainbow"]){
+        animation:rainbow 5s linear;
+        animation-iteration-count:infinite;
       }
     </style>
   </head>
@@ -184,9 +229,16 @@
         "minValue": 127380
       },
       "Bone Blossom": {
-        "minWeight": 6.65,
-        "k": 3751.43,
-        "minValue": 157938
+        // "minWeight": 6.65,
+        // "minWeight": 8,
+        // "minWeight": 2.10,
+        // "k": 3751.43,
+        // "minValue": 157938
+        // "minValue": 250000
+        // note: do not trust the value on wiki ^ i had to figure this out myself using actual bones ingame and matching it up
+        "minWeight": 2.85,
+        "k": 22222.2222222222222222222,//180500*(1/2.85)**2,//22222.22222222222, // 180500*(1/2.85)**2
+        "minValue": 180500
       },
       "Burning Bud": {
         "minWeight": 11.4,
@@ -205,7 +257,7 @@
       },
       "Candy Blossom": {
         "minWeight": 2.85,
-        "k": 11111.1112,
+        "k": 11111.11111111111,//11111.1112,
         "minValue": 90250
       },
       "Candy Sunflower": {
@@ -450,7 +502,7 @@
       },
       "Moon Blossom": {
         "minWeight": 2.85,
-        "k": 7407.4,
+        "k": 7407.325330871036,//7407.4,
         "minValue": 60166
       },
       "Moon Mango": {
@@ -460,7 +512,7 @@
       },
       "Moon Melon": {
         "minWeight": 7.6,
-        "k": 281.2,
+        "k": 281.24999999999994,//281.2,
         "minValue": 16245
       },
       "Moonflower": {
@@ -711,6 +763,7 @@
       "Fried":7,
       "Cooked":9,
       "Amber":9,
+      "Tempestuous":18,
       "OldAmber":19,
       "Zombified": 24,
       //"Cooked":24,
@@ -718,6 +771,8 @@
       //"Twisted":29,
       "Ceramic":29,
       "AncientAmber":49,
+      "Friendbound":69,
+      "Infected":74,
       "Sundried":84,
       "Aurora":89,
       "Shocked": 99,
@@ -739,6 +794,7 @@
       //None:0,
       Wet:0x40a4df,
       Chilled:0,
+      Drenched:0x0037e4,
       Frozen:0x6cb8ff,
 
       "Chocolate": 0x5c4033,
@@ -746,28 +802,40 @@
       "Moonlit": 0x998dff,
       "Windstruck":0xa2b9d1,
       "Pollinated": 0xffaa00,
-      "Sandy":0,
-      "Clay":0x966450,
+      "Sandy":0xd4bf8d,
+      "Clay":0x93817a,
       "Bloodlit": 0xc80000,
       "Plasma": 0xd02b89,
       "Honey Glazed": 0xffcc00,
       "Heavenly":0xfff9a0,
-      "Burnt":0,
-      "Verdant":0,
+      //"Burnt":0,
+      //"Verdant":0,
+      "Cloudtouched":0xe1ffff,
+      //"Fried":0,
+      //"Cooked":0,
+      "Amber":0xffc000,
+      "Tempestuous":0x8fa3b4,
+      //"OldAmber":19,
       "Zombified": 0x80c77f,
-      "Cooked":0,
+      //"Cooked":0,
       "Molten":0xdf6400,
       "Ceramic":0xeab892,
       "Twisted":0xbfbfbf,
-      "Sundried":0,
+      //"Ceramic":0,
+      "AncientAmber":0xcc4400,
+      //"Friendbound":0,
+      "Infected":0x43a700,
+      "Sundried":0xcf5d00,
       "Aurora":0x6359af,
       "Shocked": 0xffff64,
       "Alienlike":0,
+      "Paradisal":0xb0f000,
       "Celestial":0xff00ff,
-      "Galactic":0,
+      //"Galactic":0,
       "Disco": 0xff69b4,
-      "Voidtouched": 0,
-      "Dawnbound":0
+      //"Meteoric":0,
+      "Voidtouched": 0xe100ff,
+      //"Dawnbound":0
     }
 
     const getParam=name=>new URL(window.location).searchParams.get(name);
@@ -800,7 +868,7 @@
       ...Object.entries(mutations)
       .map(([i,v])=>{
         //`<label><input type="radio" name="temp" value="Wet">Wet</label>`
-        const label=Object.assign(document.createElement('label'),{text:v,style:colours[i]&&`color:#${colours[i].toString(16)}`||''});
+        const label=Object.assign(document.createElement('label'),{text:v,style:colours[i]&&`color:#${colours[i].toString(16).padStart(6,'0')}`||''});
         const input=Object.assign(document.createElement('input'),{type:'checkbox',id:'mutation',value:v,name:i});
         label.appendChild(input,"hello")
         label.append(`${i} ( +${v} )`)
@@ -874,7 +942,7 @@
 
     const craftRadios=document.querySelectorAll('input[name="craft"]');
     craftRadios.forEach(radio=>(
-      radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16)}`||'',radio.addEventListener('change',()=>{
+      radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16).padStart(6,'0')}`||'',radio.addEventListener('change',()=>{
       const craft=Array.from(craftRadios).find(v=>v.checked).value;
       setParam('craft',craft);
       craftMulti=crafts[craft];
@@ -886,7 +954,7 @@
     Array.from(craftRadios).find(v=>v.value==getParam('craft')).click();
 
     const tempRadios=document.querySelectorAll('input[name="temp"]');
-    tempRadios.forEach(radio=>(radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16)}`||'',radio.addEventListener('change',()=>{
+    tempRadios.forEach(radio=>(radio.parentNode.style.color=colours[radio.value]&&`#${colours[radio.value].toString(16).padStart(6,'0')}`||'',radio.addEventListener('change',()=>{
       const temp=Array.from(tempRadios).find(v=>v.checked).value;
       setParam('temp',temp);
       tempMulti=temps[temp];
