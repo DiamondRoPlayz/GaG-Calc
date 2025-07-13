@@ -977,7 +977,7 @@
       if(!crop)return;selectedCrop=crop;setParam('crop',name);
       //cropSelect.id=rarityFruits.Prismatic.includes(name)?'Rainbow':''
       cropSelect.style=rarityFruits.Prismatic.includes(name)
-      &`animation:Prismatic 5s linear;animation-iteration-count:infinite`
+      &&`animation:Prismatic 5s linear;animation-iteration-count:infinite`
       ||rarityFruits.Transcendent.includes(name)
       &&`animation:Transcendent 5s linear;animation-iteration-count:infinite`
       ||`color:${getColour(Object.entries(rarityFruits).find(([a,b])=>b.includes(name))?.[0])}`;
